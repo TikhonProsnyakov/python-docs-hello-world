@@ -1,5 +1,6 @@
 from flask import Flask
 import pymongo
+from bson.json_util import dumps
 
 
 app = Flask(__name__)
@@ -11,7 +12,10 @@ user_collection = db["users"]
 
 @app.route('/')
 def hello_world():
-  return 'Hello, World!'
+  user = user_collection.find({'id': 2})
+  if user.count() > 0:
+    return dumps(user.__getitem__(0))
+  return "{}", 200
 
 if __name__ == '__main__':
   app.run()
